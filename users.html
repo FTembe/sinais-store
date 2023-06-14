@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sinais Store</title>
+    <script src="https://kit.fontawesome.com/af562a2a63.js" crossorigin="anonymous"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+    </style>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            width: 100%;
+            overflow: auto;
+            display: flex;
+            justify-content: center;
+        }
+
+        main {
+            margin: 2rem auto;
+            width: 90%;
+        }
+
+        table {
+            overflow: auto;
+            width: 100%;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .activate-button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        span {
+            font-weight: 600;
+        }
+
+        .lbl-red {
+            color: #DC3545;
+        }
+
+        .red {
+            background-color: #DC3545;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>Telefone</th>
+                    <th>Data</th>
+                    <th>Estado</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </main>
+
+    <script>
+        getUsers()
+
+        function formatDate(dt) {
+            let date = new Date(dt)
+
+            return dt;
+        }
+        async function getUsers() {
+            let users = '';
+            try {
+                const response = await fetch("https://kitara.space/api/users");
+                const result = await response.json();
+                if (!result.status) {
+
+                }
+                else {
+
+                    result.data.forEach(user => {
+                        users += `<tr>
+                        <td>${user.name}</td>
+                        <td>${user.email}</td>
+                        <td>${user.phone}</td>
+                        <td>${formatDate(user.created_at)}</td>
+                        <td>${user.coin && user.coin.hasOwnProperty('status') && user.coin.status?'<span>Opera</span>' : '<span class="lbl-red">N/opera</span>'}</td>
+                        <td>
+                            ${user.coin && user.coin.hasOwnProperty('status') && user.coin.status ?
+
+                                '<button onclick =toggle("'+ user.email + '") class="activate-button red">Desactivar</button>' :
+                                '<button onclick =toggle("'+ user.email + '")  class="activate-button ">Ativar</button>'
+
+                            }
+                        </td>
+                        </tr>
+                        `
+                    });
+                }
+            } catch (error) {
+                console.error("Error:", error);
+            }
+
+            document.querySelector('tbody').innerHTML = users
+        }
+
+        async function toggle(user) {
+            const toggle = new FormData();
+            toggle.append('email',user);
+            toggle.append('token',user);
+            try {
+                const response = await fetch("https://kitara.space/api/user/toggle", {
+                    method: "POST",
+                    body: toggle,
+                });
+                const result = await response.json();
+
+                console.log(result)
+                window.location.href ='users.html'
+
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        }
+
+
+    </script>
+</body>
+
+</html>
