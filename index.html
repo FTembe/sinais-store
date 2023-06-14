@@ -97,6 +97,12 @@
   </div>
 
   <script>
+
+        let loadStorage = window.localStorage.getItem("user");
+
+    if (!loadStorage) window.location.href = "home.html";
+
+    
     function login() {
       const login = new FormData();
       login.append("password", document.querySelector("input[type='password']").value);
