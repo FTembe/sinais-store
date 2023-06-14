@@ -1,82 +1,117 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sinais Store</title>
+    <script
+      src="https://kit.fontawesome.com/af562a2a63.js"
+      crossorigin="anonymous"
+    ></script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sinais Store</title>
-  <script src="https://kit.fontawesome.com/af562a2a63.js" crossorigin="anonymous"></script>
-  <style>
-    @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+      * {
+        margin: 0;
+        padding: 0;
+      }
 
-    * {
-      margin: 0;
-      padding: 0;
-    }
+      body {
+        min-height: 100vh;
+        font-family: "Poppins", "Times New Roman", Times, serif, sans-serif;
+        background-color: hsl(352, 91%, 8%);
+        color: #fff;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        position: relative;
+      }
 
-    body {
-      min-height: 100vh;
-      font-family: "Poppins", "Times New Roman", Times, serif, sans-serif;
-      background-color: hsl(352, 91%, 8%);
-      color: #fff;
-      text-align: center;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      position: relative;
-    }
+      h1 {
+        font-size: 24px;
+      }
 
-    h1 {
-      font-size: 24px;
-    }
+      p {
+        font-size: 18px;
+      }
 
-    p {
-      font-size: 18px;
-    }
+      .button {
+        padding: 10px 20px;
+        border-radius: 25px;
+        border: none;
+        background-color: #dc3545;
+        color: white;
+        cursor: pointer;
+        font-weight: 500;
+        text-decoration: none;
+      }
 
-    .button {
-      padding: 10px 20px;
-      border-radius: 25px;
-      border: none;
-      background-color: #DC3545;
-      color: white;
-      cursor: pointer;
-      font-weight: 500;
-      text-decoration: none;
+      .off {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background-color: #dc3545;
+        width: 40px;
+        height: 40px;
+        border: none;
+        border-radius: 50%;
+        padding: 0;
+        margin: 0;
+        text-align: center;
+      }
 
-    }
+      .off i {
+        color: #fff;
+        font-size: 1.6rem;
+        cursor: pointer;
+      }
+    </style>
+  </head>
 
-    .off {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      background-color: #DC3545;
-      width: 40px;
-      height: 40px;
-      border: none;
-      border-radius: 50%;
-      padding: 0;
-      margin: 0;
-      text-align: center;
-    }
+  <body>
+    <a href="">
+      <button class="off" onclick="logout()">
+        <i class="fa fa-power-off" aria-hidden="true"></i></button
+    ></a>
+    <h1>Sinais Store 100%</h1>
+    <br />
+    <span id="alert"></span>
+    <br />
+    <p>Clique no botão</p>
+    <br />
+    <a class="button" href="https://api.whatsapp.com/send?phone=258874601002"
+      >Turbinar</a
+    >
 
-    .off i {
-      color: #fff;
-      font-size: 1.6rem;
-      cursor: pointer;
-    }
-  </style>
-</head>
+    <script>
 
-<body>
-  <a href="index.html"> <button class="off"><i class="fa fa-power-off" aria-hidden="true"></i></button></a>
-  <h1>Sinais Store 100%</h1>
-  <br>
-  <p>clique no botao</p>
-  <br>
-  <a class="button" href="https://api.whatsapp.com/send?phone=258874601002">Turbinar</a>
-</body>
+      function logout(){
+        window.localStorage.removeItem("user")
+        window.location.href = "./";
+      }
+      let loadStorage = window.localStorage.getItem("user");
 
+      if (!loadStorage) window.location.href = "./";
+      let userOnStorage = JSON.parse(loadStorage);
+
+      getUsers(userOnStorage.token);
+
+      async function getUsers(token) {
+        let users = "";
+        try {
+          const response = await fetch(
+            "https://kitara.space/api/token/" + token
+          );
+          const result = await response.json();
+          if (result.status) window.location.href = "sinais.html";
+          document.querySelector("#alert").innerHTML= result.message
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      }
+    </script>
+  </body>
 </html>
